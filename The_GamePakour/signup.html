@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Create Account</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="navbar">
+    <div class="logo">
+      <img src="logo.jpg">
+      <span>The GameParkour</span>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="form-box">
+      <h2>Signup</h2>
+      <form id="signupForm">
+        <input type="text" id="name" placeholder="Enter name" required>
+        <input type="email" id="email" placeholder="Enter email" required>
+        <input type="password" id="password" placeholder="Enter password" required>
+        <button type="submit">Create Account</button>
+      </form>
+
+    </div>
+  </div>
+
+  <div class="footer">© 2025 The GameParkour</div>
+
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Signup successful!");
+        window.location = "login.html";
+      } else {
+        alert(data.error || "Signup failed");
+      }
+    });
+  </script>
+
+</body>
+
+</html>
