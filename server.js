@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000; // ✅ DECLARED ONLY ONCE
 const SALT_ROUNDS = 10;
 
 // -------------------- PERSISTENT DB PATH --------------------
-const defaultDir = process.env.DB_DIR || "/var/data";
+const defaultDir = process.env.DB_DIR || "/tmp";
 const defaultDb = path.join(defaultDir, "gamerverse.db");
 const DB_PATH = process.env.DB_PATH || defaultDb;
 
@@ -167,3 +167,4 @@ app.listen(PORT, () => {
   console.log(`Server running → http://localhost:${PORT}`);
   console.log(`Using DB → ${DB_PATH}`);
 });
+
