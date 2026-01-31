@@ -43,14 +43,20 @@
 <script>
 // ---------------- AUTH LINK (Login → Logout) ----------------
 async function checkAuth() {
-  const res = await fetch("/api/profile");
+  const res = await fetch("/api/profile", {
+    credentials: "include"   // ✅ IMPORTANT
+  });
+
   const link = document.getElementById("authLink");
 
   if (res.status === 200) {
     link.textContent = "Logout";
     link.href = "#";
     link.onclick = async () => {
-      await fetch("/api/logout", { method: "POST" });
+      await fetch("/api/logout", {
+        method: "POST",
+        credentials: "include"   // ✅ IMPORTANT
+      });
       window.location = "login.html";
     };
   } else {
@@ -63,7 +69,10 @@ checkAuth();
 
 // ---------------- LOAD WISHLIST ----------------
 async function loadWishlist() {
-  const res = await fetch('/api/wishlist');
+  const res = await fetch("/api/wishlist", {
+    credentials: "include"   // ✅ IMPORTANT
+  });
+
   if (res.status === 401) {
     window.location = 'login.html';
     return;
@@ -73,7 +82,6 @@ async function loadWishlist() {
   const list = document.getElementById("wishlist");
   list.innerHTML = "";
 
-  // SERVER returns { ok: true, wishlist: rows }
   const items = data.wishlist || [];
 
   if (items.length === 0) {
@@ -90,7 +98,9 @@ async function loadWishlist() {
     div.innerHTML = `
       <h3>${w.title}</h3>
       <p>${w.genre || "No genre"}</p>
-      <p style="font-size:0.8rem; color:#bfc7d1;">Release: ${w.expected_release || "Unknown"}</p>
+      <p style="font-size:0.8rem; color:#bfc7d1;">
+        Release: ${w.expected_release || "Unknown"}
+      </p>
 
       <button class="btn deleteBtn"
         data-id="${w.id}"
@@ -107,11 +117,12 @@ async function loadWishlist() {
       const id = btn.getAttribute("data-id");
 
       const res = await fetch(`/api/wishlist/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        credentials: "include"   // ✅ IMPORTANT
       });
 
       if (res.ok) loadWishlist();
-      else alert("Delete error");
+      else alert("Delete failed");
     };
   });
 }
@@ -127,6 +138,7 @@ document.getElementById("wishForm").addEventListener("submit", async e => {
 
   const res = await fetch("/api/wishlist", {
     method: "POST",
+    credentials: "include",   // ✅ IMPORTANT
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ title, genre, expected_release })
   });
