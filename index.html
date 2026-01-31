@@ -23,13 +23,11 @@
   </div>
 </div>
 
-
 <div class="homepage">
   <h1>Welcome to The GameParkour</h1>
   <p>Your personal Gaming Hub.</p>
 
   <div class="view">
-    
     <div class="cards">
       <h3>Track Progress</h3>
       <p>Store your gaming history, wishlist, achievements and more.</p>
@@ -44,13 +42,10 @@
       <h3>Gaming Stats</h3>
       <p>View your total hours, level & achievements.</p>
     </a>
-
   </div>
 </div>
 
-
 <div class="footer">© 2025 The GameParkour</div>
-
 
 <script>
 // --------------------------
@@ -60,19 +55,22 @@ async function checkAuth() {
   const link = document.getElementById("authLink");
 
   try {
-    const res = await fetch("/api/profile");
+    const res = await fetch("/api/profile", {
+      credentials: "include"   // ✅ IMPORTANT
+    });
 
     if (res.status === 200) {
-      // USER IS LOGGED IN
       link.textContent = "Logout";
       link.href = "#";
 
       link.onclick = async () => {
-        await fetch("/api/logout", { method: "POST" });
+        await fetch("/api/logout", {
+          method: "POST",
+          credentials: "include"   // ✅ IMPORTANT
+        });
         window.location = "login.html";
       };
     } else {
-      // USER NOT LOGGED IN
       link.textContent = "Login";
       link.href = "login.html";
     }
