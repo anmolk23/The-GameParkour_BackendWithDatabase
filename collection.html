@@ -17,8 +17,6 @@
     <a class="active" href="collection.html">Collection</a>
     <a href="wishlist.html">Wishlist</a>
     <a href="stats.html">Stats</a>
-
-    <!-- THIS WILL AUTO-CHANGE TO LOGOUT -->
     <a id="authLink" href="login.html">Login</a>
   </div>
 </div>
@@ -47,19 +45,24 @@
 async function updateAuthLink() {
   const link = document.getElementById("authLink");
 
-  const res = await fetch("/api/profile");
+  const res = await fetch("/api/profile", {
+    credentials: "include"   // ✅ IMPORTANT
+  });
+
   if (res.status === 401) {
     link.textContent = "Login";
     link.href = "login.html";
     return;
   }
 
-  // Logged in → show LOGOUT button
   link.textContent = "Logout";
   link.href = "#";
 
   link.onclick = async () => {
-    await fetch("/api/logout", { method: "POST" });
+    await fetch("/api/logout", {
+      method: "POST",
+      credentials: "include"   // ✅ IMPORTANT
+    });
     window.location = "login.html";
   };
 }
@@ -69,7 +72,9 @@ updateAuthLink();
 
 // -------------------- LOAD COLLECTION --------------------
 async function loadCollection() {
-  const res = await fetch('/api/collection');
+  const res = await fetch("/api/collection", {
+    credentials: "include"   // ✅ IMPORTANT
+  });
 
   if (res.status === 401) {
     window.location = "login.html";
@@ -110,7 +115,8 @@ async function loadCollection() {
       const id = btn.dataset.id;
 
       const res = await fetch(`/api/collection/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        credentials: "include"   // ✅ IMPORTANT
       });
 
       if (res.ok) loadCollection();
@@ -130,6 +136,7 @@ document.getElementById("addGameForm").addEventListener("submit", async e => {
 
   const res = await fetch("/api/collection", {
     method: "POST",
+    credentials: "include",   // ✅ IMPORTANT
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ title, genre, hours })
   });
@@ -147,4 +154,3 @@ loadCollection();
 
 </body>
 </html>
-
