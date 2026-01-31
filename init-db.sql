@@ -1,5 +1,8 @@
 PRAGMA foreign_keys = ON;
 
+-- =========================
+-- USERS TABLE
+-- =========================
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
@@ -13,6 +16,9 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- =========================
+-- GAMES / COLLECTION TABLE
+-- =========================
 CREATE TABLE IF NOT EXISTS games (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
@@ -22,15 +28,10 @@ CREATE TABLE IF NOT EXISTS games (
   owned INTEGER DEFAULT 1,
   img_url TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS wishlist (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER NOT NULL,
-  title TEXT NOT NULL,
-  genre TEXT,
-  expected_release TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-);
+-- =========================
+-- WISHLIST TABLE
+-- =========================
+CREATE TABLE IF NOT EXISTS wishlis
