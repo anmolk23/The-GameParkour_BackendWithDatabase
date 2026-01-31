@@ -62,19 +62,15 @@
   </div>
 
   <div class="page">
-
     <h1>My Profile</h1>
 
     <div class="card">
       <img id="profilePic" class="profile-pic" src="logo.jpg">
-
       <h2 id="userName">Player Name</h2>
       <p id="userBio">Bio not set.</p>
       <p>Email: <span id="userEmail"></span></p>
-
       <button class="btn" id="editBtn" style="margin-top:15px;">Edit Profile</button>
     </div>
-
   </div>
 
   <div class="footer">© 2025 The GameParkour</div>
@@ -82,15 +78,12 @@
   <!-- MODAL -->
   <div id="modalBg" class="modal-bg">
     <div class="modal">
-
       <div class="closeModal" id="closeModal">X</div>
       <h3>Edit Profile</h3>
 
       <form id="editProfileForm" enctype="multipart/form-data">
-
         <input type="text" id="editName" placeholder="New Name">
         <input type="email" id="editEmail" placeholder="New Email">
-
         <textarea id="editBio" placeholder="Bio / Description" style="height:80px;"></textarea>
 
         <label style="margin-top:10px; display:block; color:#bfc7d1;">
@@ -102,28 +95,29 @@
 
         <button class="btn" type="submit" style="margin-top:15px; width:100%;">Save Changes</button>
       </form>
-
     </div>
   </div>
 
   <script>
     // LOAD PROFILE DATA
     async function loadProfile() {
-      const res = await fetch("/api/profile");
+      const res = await fetch("/api/profile", {
+        credentials: "include"   // ✅ IMPORTANT
+      });
 
-      // If not logged in → show Login instead of Logout
       if (res.status === 401) {
-        document.getElementById("authLink").textContent = "Login";
-        document.getElementById("authLink").href = "login.html";
+        window.location.href = "login.html";
         return;
       }
 
-      // Logged in → change button to LOGOUT
       const auth = document.getElementById("authLink");
       auth.textContent = "Logout";
       auth.href = "#";
       auth.onclick = async () => {
-        await fetch("/api/logout", { method: "POST" });
+        await fetch("/api/logout", {
+          method: "POST",
+          credentials: "include"   // ✅ IMPORTANT
+        });
         window.location = "login.html";
       };
 
@@ -138,14 +132,13 @@
           document.getElementById("profilePic").src = data.profile.photo;
         }
 
-        // Fill edit form
         document.getElementById("editName").value = data.profile.name;
         document.getElementById("editEmail").value = data.profile.email;
         document.getElementById("editBio").value = data.profile.bio || "";
       }
     }
-    loadProfile();
 
+    loadProfile();
 
     // OPEN MODAL
     document.getElementById("editBtn").onclick = () => {
@@ -156,7 +149,6 @@
     document.getElementById("closeModal").onclick = () => {
       document.getElementById("modalBg").style.display = "none";
     };
-
 
     // PHOTO PREVIEW
     document.getElementById("editPhoto").addEventListener("change", function () {
@@ -172,7 +164,6 @@
       }
     });
 
-
     // SUBMIT PROFILE UPDATE
     document.getElementById("editProfileForm").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -187,20 +178,20 @@
 
       const res = await fetch("/api/profile/update", {
         method: "POST",
+        credentials: "include",   // ✅ IMPORTANT
         body: formData
       });
 
       const data = await res.json();
 
       if (data.ok) {
-        alert("Profile updated!");
-        loadProfile();
+        alert("Profile updated successfully!");
         document.getElementById("modalBg").style.display = "none";
+        loadProfile();
       } else {
-        alert("Error updating profile");
+        alert("Profile update failed");
       }
     });
-
   </script>
 
 </body>
